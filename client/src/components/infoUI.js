@@ -2,7 +2,7 @@ import React from "react";
 import "../styles.css";
 
 export default function InfoUI({ teamData }) {
-  //if (teamData) teamData.map((x) => console.log(x));
+  // returns a table
   return (
     <table id="table-stats">
       <thead>

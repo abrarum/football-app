@@ -6,23 +6,22 @@ export default function Search({ options, onChange }) {
   const [selectKey, setSelectKey] = useState(null);
 
   const updateForm = useCallback(
+    /* onChange updates the selected key. */
     (value) => {
-      // update the key
       setSelectKey(value);
     },
     [setSelectKey]
   );
 
   useEffect(() => {
-    // if selectKey changes, send the payload back
+    /* if selectKey changes, send the onChange event payload back */
     onChange(selectKey);
   }, [onChange, selectKey]);
 
   return (
-    <div className="App">
       <form>
         <Select
-          name="mySelect"
+          name="selectKey"
           value={options.filter(({ id }) => id === selectKey)}
           getOptionLabel={({ name }) => name}
           getOptionValue={({ id }) => id}
@@ -30,6 +29,5 @@ export default function Search({ options, onChange }) {
           options={options}
         />
       </form>
-    </div>
   );
 }

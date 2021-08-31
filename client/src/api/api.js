@@ -7,7 +7,6 @@ const api = axios.create({
 export const getInfo = () => api.get('/get-info')
 export const getStats = () => api.get('/get-stats');
 
-
 const apis = {
   getInfo,
   getStats

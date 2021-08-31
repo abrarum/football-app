@@ -1,8 +1,6 @@
 import "./styles.css";
 import Search from "./components/search";
 import InfoUI from "./components/infoUI";
-//import { allTeams } from "./api/allTeams";
-//import { allGoals } from "./api/totalGoals";
 import api from "./api/api"
 import { useCallback, useEffect, useState } from "react";
 
@@ -13,9 +11,9 @@ export default function App() {
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    console.log("inside this effecto.....")
+    /* On mount, fetches both the end-points 
+    and responses are settled as states. */
 
-    
     async function fetchInfo() {
       const response = await api.getInfo();
       setInfo(response.data.teams);
@@ -27,10 +25,12 @@ export default function App() {
     }
 
     fetchInfo().then(() => fetchStats())
+
+    // no dependencies -> [], run once!
   }, []);
 
   const mergeData = useCallback((allData, allStats) => {
-    // merging
+    /* filtering: filterData -> [mergeData] -> setFilteredData */
 
     let obj = {};
     allData.forEach((x) => {
@@ -38,7 +38,6 @@ export default function App() {
     });
 
     let result = allStats.map((x) => {
-      //console.log("x is: ", x);
       return {
         id: x.id,
         name: obj[x.id].name,
@@ -54,9 +53,8 @@ export default function App() {
   }, []);
 
   const filterData = useCallback(
-    // filtering
+     /* filtering: [filterData] -> mergeData -> setFilteredData */
     () => {
-      //console.log("inside filterData", info);
       let dataFormat = {
         id: "",
         name: "",
@@ -78,7 +76,6 @@ export default function App() {
           return x.id === searchItem;
         })
         .map((x) => {
-          //console.log("inside mapper", x);
           dataFormat.id = x.id;
           dataFormat.name = x.name;
           dataFormat.address = x.address;
@@ -103,17 +100,15 @@ export default function App() {
           return allStats.push(stats);
         });
 
-      console.log("allStats, allData", allData, allStats);
-
       return [allData, allStats];
     },
     [info, searchItem, standings]
   );
 
   useEffect(() => {
+    // On selection of the search item, the data is then filtered
     if (searchItem) {
       let [allData, allStats] = filterData();
-      console.log("dataArrays is: ", allData, allStats);
       let result = mergeData(allData, allStats);
       setFilteredData(result);
     } else {
